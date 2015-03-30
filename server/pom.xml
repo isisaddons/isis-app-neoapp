@@ -1,0 +1,133 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.isisaddons.app</groupId>
+		<artifactId>neoapp</artifactId>
+		<version>1.9.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>neoapp-server</artifactId>
+
+	<name>Neo App Server (port 7474)</name>
+	<description>Adapted from https://github.com/Sprint/isis-neo4</description>
+
+	<properties>
+		<neo4j.version>2.1.6</neo4j.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.9</version>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.neo4j.app</groupId>
+			<artifactId>neo4j-server</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.neo4j.app</groupId> <artifactId>neo4j-server-advanced</artifactId> 
+			<version>${neo4j.version}</version> </dependency> -->
+		<dependency>
+			<groupId>org.neo4j.app</groupId>
+			<artifactId>neo4j-server</artifactId>
+			<version>${neo4j.version}</version>
+			<type>jar</type>
+			<classifier>static-web</classifier>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-kernel</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-community</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-shell</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-primitive-collections</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-objectstore</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.9</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>server-api</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+			<artifactId>org.mozilla.javascript</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rrd4j</groupId>
+			<artifactId>rrd4j</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>neo4j-release-repository</id>
+			<name>Neo4j Maven 2 release repository</name>
+			<url>http://m2.neo4j.org/releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>
