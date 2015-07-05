@@ -1,12 +1,30 @@
 package dom.simple;
 
-import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.Title;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
-import javax.jdo.annotations.*;
-import java.util.List;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Unique;
+import javax.jdo.annotations.Version;
+import javax.jdo.annotations.VersionStrategy;
+
+import com.google.common.collect.Iterables;
+
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.RenderType;
+import org.apache.isis.applib.annotation.Title;
 
 @PersistenceCapable(identityType= IdentityType.DATASTORE)
 @DatastoreIdentity(
@@ -16,8 +34,12 @@ import java.util.List;
         strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
 @Unique(name="HOST_NAME_UNQ", members = {"name"})
-@ObjectType("HOST")
-@Bookmarkable
+@DomainObject(
+        objectType = "HOST"
+)
+@DomainObjectLayout(
+        bookmarking = BookmarkPolicy.AS_ROOT
+)
 public class Host {
 
     // region > Name property
@@ -36,26 +58,52 @@ public class Host {
     //endregion
 
     // region > IpAddresses property
-    private List<IpAddress> ipAddresses;
+    private Set<IpAddress> ipAddresses = new TreeSet<>();
 
     @Column(allowsNull="false")
-    @Title(sequence="2")
-    @MemberOrder(sequence="2")
-    public List<IpAddress> getIpAddresses() {
+    @CollectionLayout(
+            render = RenderType.EAGERLY
+    )
+    public Set<IpAddress> getIpAddresses() {
         return ipAddresses;
     }
-
-    public void setIpAddresses(final List<IpAddress> ipAddresses) {
+    public void setIpAddresses(final Set<IpAddress> ipAddresses) {
         this.ipAddresses = ipAddresses;
     }
     //endregion
 
-    public void addIpAddress(IpAddress ipAddress){
+    //region > addIpAddress (action)
+    @MemberOrder(name="ipAddresses", sequence = "1")
+    @ActionLayout(named = "Add")
+    public void addIpAddress(@ParameterLayout(named = "Address") String address){
+        final IpAddress ipAddress = container.newTransientInstance(IpAddress.class);
+        ipAddress.setAddress(address);
         this.ipAddresses.add(ipAddress);
+        container.persistIfNotAlready(ipAddress);
     }
 
+    public String validateAddIpAddress(final String address) {
+        return Iterables.any(getIpAddresses(), input -> input.getAddress().equals(address))? "Already added": null;
+    }
+    //endregion
+
+    //region > removeIpAddress (action)
+    @MemberOrder(name="ipAddresses", sequence = "2")
+    @ActionLayout(named = "Remove")
     public void removeIpAddress(IpAddress ipAddress){
         this.ipAddresses.remove(ipAddress);
     }
+
+//    public String disableRemoveIpAddress() {
+//        return getIpAddresses().isEmpty()? "No addresses to remove": null;
+//    }
+    public Collection<IpAddress> choices0RemoveIpAddress() {
+        return getIpAddresses();
+    }
+    //endregion
+
+    @javax.inject.Inject
+    DomainObjectContainer container;
+    //endregion
 
 }
