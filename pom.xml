@@ -16,7 +16,9 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.isisaddons.app</groupId>
@@ -32,16 +34,11 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.9.0_dn4-SNAPSHOT</isis.version>
-
-        <!-- must be consistent with the versions defined by the JDO Objectstore -->
-        <datanucleus-accessplatform-jdo-rdbms.version>4.0.4</datanucleus-accessplatform-jdo-rdbms.version>
-        <datanucleus-jodatime.version>4.0.4</datanucleus-jodatime.version>
-        <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
-        
+        <isis.version>1.9.0-SNAPSHOT</isis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <assertj-core.version>2.0.0</assertj-core.version>
     </properties>
 
     <repositories>
@@ -53,12 +50,14 @@
                 <enabled>false</enabled>
             </releases>
             <snapshots>
+                <enabled>true</enabled>
             </snapshots>
         </repository>
         <repository>
             <id>Cloudbees snapshots</id>
             <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
             <snapshots>
+                <enabled>true</enabled>
             </snapshots>
             <releases>
                 <enabled>false</enabled>
@@ -93,7 +92,6 @@
                             -->
                         </rules>
                     </configuration>
-                    <!-- goal:enforce supposedly binds to phase:validate, but explicit binding seems to be required -->
                     <executions>
                         <execution>
                             <id>validate-enforce</id>
@@ -111,6 +109,7 @@
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
+                        <compilerArgument>-parameters</compilerArgument>
                     </configuration>
                     <executions>
                         <execution>
@@ -142,7 +141,7 @@
                         </excludes>
                         <useFile>true</useFile>
                         <printSummary>true</printSummary>
-                        <outputDirectory>${project.build.directory}/surefire-reports</outputDirectory>
+                        <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     </configuration>
                 </plugin>
 
@@ -151,17 +150,6 @@
                     <artifactId>maven-surefire-report-plugin</artifactId>
                     <version>2.16</version>
                     <configuration>
-                        <includes>
-                            <include>**/*Test.java</include>
-                            <include>**/*Test$*.java</include>
-                            <include>**/*Test_*.java</include>
-                            <include>**/*Spec*.java</include>
-                        </includes>
-                        <excludes>
-                            <exclude>**/Test*.java</exclude>
-                            <exclude>**/*ForTesting.java</exclude>
-                            <exclude>**/*Abstract*.java</exclude>
-                        </excludes>
                         <showSuccess>false</showSuccess>
                     </configuration>
                     <executions>
@@ -259,6 +247,9 @@
                             <exclude>**/*.json</exclude>
                             <exclude>**/*.min.js</exclude>
                             <exclude>**/*.js</exclude>
+
+                            <exclude>**/translations.pot</exclude>
+                            <exclude>**/translations*.po</exclude>
                         </excludes>
                         <licenses>
                             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
@@ -292,8 +283,10 @@
                                 <patterns>
                                     <pattern>Permission to copy in any form is granted for use</pattern>
                                     <pattern>Permission to use, copy, modify and distribute the DocBook DTD</pattern>
-                                    <pattern>is hereby granted in perpetuity, provided that the above copyright</pattern>
-                                    <pattern>This is the catalog data file for DocBook XML V4.5. It is provided as</pattern>
+                                    <pattern>is hereby granted in perpetuity, provided that the above copyright
+                                    </pattern>
+                                    <pattern>This is the catalog data file for DocBook XML V4.5. It is provided as
+                                    </pattern>
                                     <pattern>XML Catalog data for DocBook XML V4.5</pattern>
                                     <pattern>DocBook additional general entities V4.5</pattern>
                                     <pattern>XML EXCHANGE TABLE MODEL DECLARATION MODULE</pattern>
@@ -341,6 +334,15 @@
         </plugins>
     </build>
 
+    <modules>
+        <module>dom</module>
+        <module>fixture</module>
+        <!-- currently broken -->
+        <!--<module>integtests</module>-->
+        <module>server</module>
+        <module>webapp</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
 
@@ -358,6 +360,12 @@
                 <version>${isis.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
             </dependency>
 
 
@@ -388,36 +396,11 @@
                 <version>1.9.0-SNAPSHOT</version>
             </dependency>
 
-
         </dependencies>
     </dependencyManagement>
 
 
     <profiles>
-        <profile>
-            <id>modules-default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>dom</module>
-                <module>fixture</module>
-                <!-- currently broken -->
-                <!--<module>integtests</module>-->
-                <module>server</module>
-                <module>webapp</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>integtest</id>
-            <modules>
-                <module>dom</module>
-                <module>fixture</module>
-                <module>integtests</module>
-                <module>server</module>
-                <module>webapp</module>
-            </modules>
-        </profile>
         <profile>
             <id>m2e</id>
             <activation>
