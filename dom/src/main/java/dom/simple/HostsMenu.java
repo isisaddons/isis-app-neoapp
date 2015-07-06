@@ -9,41 +9,44 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-@DomainService(repositoryFor = Host.class)
-@DomainServiceLayout(
-        menuOrder = "10"
+@DomainService(
+        nature = NatureOfService.VIEW
 )
-public class Hosts {
+@DomainServiceLayout(
+        menuOrder = "10",
+        menuBar = DomainServiceLayout.MenuBar.PRIMARY,
+        named = "Hosts"
+)
+public class HostsMenu {
 
     //region > create (action)
-    @MemberOrder(sequence = "2")
     public Host create(
             final @ParameterLayout(named="Name") String name) {
-        final Host obj = container.newTransientInstance(Host.class);
-        obj.setName(name);
-        container.persistIfNotAlready(obj);
-        return obj;
+        return hostRepository.create(name);
     }
     //endregion
 
-
+    //region > listAll (action)
     @Action(
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
             bookmarking = BookmarkPolicy.AS_ROOT
     )
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "3")
     public List<Host> listAll() {
-        return container.allInstances(Host.class);
+        return hostRepository.listAll();
     }
+    //endregion
 
     //region > injected services
-
     @javax.inject.Inject
     DomainObjectContainer container;
+    @javax.inject.Inject
+    HostRepository hostRepository;
     //endregion
 }

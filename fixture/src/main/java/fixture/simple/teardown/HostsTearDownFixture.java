@@ -17,20 +17,27 @@
  *  under the License.
  */
 
-package fixture.simple.objects;
+package fixture.simple.teardown;
 
-import dom.simple.SimpleObject;
-import dom.simple.SimpleObjects;
+import java.util.List;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-public abstract class SimpleObjectAbstract extends FixtureScript {
+import dom.simple.Host;
+import dom.simple.HostRepository;
 
-    protected SimpleObject create(final String name, ExecutionContext executionContext) {
-        return executionContext.addResult(this, simpleObjects.create(name));
+public class HostsTearDownFixture extends FixtureScript {
+
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+        final List<Host> hosts = hostRepository.listAll();
+        for (Host host : hosts) {
+            hostRepository.delete(host);
+        }
     }
 
+
     @javax.inject.Inject
-    private SimpleObjects simpleObjects;
+    private HostRepository hostRepository;
 
 }

@@ -14,7 +14,6 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -33,20 +32,47 @@ import org.apache.isis.applib.util.ObjectContracts;
         bookmarking = BookmarkPolicy.AS_ROOT
 )
 
-public class IpAddress implements Comparable<IpAddress> {
+public class IpAddress implements Comparable<IpAddress>, ObjectWithPersistedTitle {
+
+    //region > title (implementing ObjectWithPersistedTitle)
+    private String title;
+
+    @Column(allowsNull = "false")
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+    //endregion {
 
     // region > Address property
     private String address;
 
     @Column(allowsNull="false")
     @Title(sequence="1")
-    @MemberOrder(sequence="1")
     public String getAddress() {
         return address;
     }
 
     public void setAddress(final String address) {
         this.address = address;
+    }
+    //endregion
+
+    //region > host (property)
+    private Host host;
+
+    @Column(allowsNull = "false")
+    public Host getHost() {
+        return host;
+    }
+
+    public void setHost(final Host host) {
+        this.host = host;
     }
     //endregion
 
