@@ -18,65 +18,50 @@
  */
 package integration.tests.smoke;
 
-import dom.simple.SimpleObject;
-import dom.simple.SimpleObjects;
-import fixture.simple.scenario.SimpleObjectsFixture;
-import fixture.simple.SimpleObjectsTearDownFixture;
-import integration.tests.SimpleAppIntegTest;
+import java.util.List;
 
 import javax.inject.Inject;
+
 import org.junit.Test;
+
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
+import dom.simple.Host;
+import dom.simple.HostRepository;
+import fixture.simple.scenario.RecreateHostsScenarioFixture;
+import integration.tests.NeoAppIntegTest;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectTest extends SimpleAppIntegTest {
+public class HostTest extends NeoAppIntegTest {
 
     @Inject
     FixtureScripts fixtureScripts;
     @Inject
-    SimpleObjects simpleObjects;
+    HostRepository hostRepository;
 
     FixtureScript fixtureScript;
 
-    public static class Name extends SimpleObjectTest {
+    public static class Title extends HostTest {
 
         @Test
-        public void exists() throws Exception {
+        public void derivedFromName() throws Exception {
 
             // given
-            fixtureScript = new SimpleObjectsFixture();
-            fixtureScripts.runFixtureScript(fixtureScript, null);
-
-            final SimpleObject simpleObjectPojo =
-                    fixtureScript.lookup("simple-objects-fixture/simple-object-for-foo/item-1", SimpleObject.class);
-
-            // when
-            assertThat(simpleObjectPojo, is(not(nullValue())));
-            final SimpleObject simpleObjectWrapped = wrap(simpleObjectPojo);
-
-            // then
-            assertThat(simpleObjectWrapped.getName(), is("Foo"));
-        }
-
-        @Test
-        public void doesNotExist() throws Exception {
-
-            // given
-            fixtureScript = new SimpleObjectsTearDownFixture();
+            fixtureScript = new RecreateHostsScenarioFixture();
             fixtureScripts.runFixtureScript(fixtureScript, null);
 
             // when
-            SimpleObject simpleObjectPojo = fixtureScript.lookup("non-existent", SimpleObject.class);
+            final List<Host> hosts = hostRepository.listAll();
 
             // then
-            assertThat(simpleObjectPojo, is(nullValue()));
+            for (Host host : hosts) {
+                assertThat(host.getTitle(), is(host.getName()));
 
+            }
         }
+
     }
 
 }

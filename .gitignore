@@ -15,6 +15,7 @@ JArchitectOut/
 *.jdproj
 
 neo4j_DB/
+testDB/
 
 # log files
 datanucleus.log

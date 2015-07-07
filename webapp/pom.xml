@@ -203,59 +203,14 @@
             -->
         </dependency>
 
-        <!-- 
-          JDBC drivers 
-          (for jdo objectstore)
-          -->
         <dependency>
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-neo4j</artifactId>
-            <version>4.0.5</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-        </dependency>
-
-        <!-- 
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.1-901.jdbc4</version>
-        </dependency>
-         -->
-
-        <!-- 
-        mvn install:install-file -Dfile=sqljdbc4.jar \
-                                 -DgroupId=com.microsoft.sqlserver \
-                                 -DartifactId=jdbc \
-                                 -Dversion=4.0 \
-                                 -Dpackaging=jar
-         -->
-         <!-- 
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>sqljdbc4</artifactId>
-            <version>4.0</version>
-        </dependency>
-          -->
-
-        <dependency>
-          <groupId>org.lazyluke</groupId>
-          <artifactId>log4jdbc-remix</artifactId>
-          <exclusions>
-            <exclusion>
-              <groupId>org.slf4j</groupId>
-              <artifactId>slf4j-api</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-        
         <dependency>
             <groupId>org.isisaddons.app</groupId>
             <artifactId>neoapp-server</artifactId>
-            <version>1.9.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

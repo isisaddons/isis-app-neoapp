@@ -26,9 +26,9 @@ import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegT
  * Holds an instance of an {@link IsisSystemForTest} as a {@link ThreadLocal} on the current thread,
  * initialized with ToDo app's domain services. 
  */
-public class SimpleAppSystemInitializer {
+public class NeoAppSystemInitializer {
     
-    private SimpleAppSystemInitializer(){}
+    private NeoAppSystemInitializer(){}
 
     public static IsisSystemForTest initIsft() {
         IsisSystemForTest isft = IsisSystemForTest.getElseNull();
@@ -47,24 +47,24 @@ public class SimpleAppSystemInitializer {
             with(new DataNucleusPersistenceMechanismInstaller());
 
             // services annotated with @DomainService
-            withServicesIn( "dom.simple"
-                            ,"fixture.simple"
-                            ,"org.apache.isis.core.wrapper"
-                            ,"org.apache.isis.applib"
-                            ,"org.apache.isis.core.metamodel.services"
-                            ,"org.apache.isis.core.runtime.services"
-                            ,"org.apache.isis.objectstore.jdo.datanucleus.service.support" // IsisJdoSupportImpl
-                            ,"org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" // EventBusServiceJdo
-                            );
+            withServicesIn("dom.simple"
+                    , "fixture.simple"
+                    , "org.isisaddons.module.fakedata.dom"
+            );
+
         }
 
         private static IsisConfiguration testConfiguration() {
             final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
 
+            // override the standard DN configurations to use neo4j instead of JDBC
+            testConfiguration.putDataNucleusProperty("javax.jdo.option.ConnectionURL", "neo4j:testDB");
+
             // enable stricter checking
             testConfiguration.put(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, "true");
 
             testConfiguration.addRegisterEntitiesPackagePrefix("dom");
+
             return testConfiguration;
         }
     }
