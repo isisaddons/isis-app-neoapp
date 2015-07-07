@@ -1,37 +1,33 @@
 = isis-app-neoapp
 :_imagesdir: images/
 
-This sample app demonstrates link:http://isis.apache.org[Apache Isis] configured to run against link:http://neo4j.com/[Neo4J] (courtesy of Isis' integration with link:datanucleus.org[DataNucleus].
+This sample app demonstrates link:http://isis.apache.org[Apache Isis] configured to run against link:http://neo4j.com/[Neo4J] (courtesy of Isis' integration with link:datanucleus.org[DataNucleus]).
 
-The sample app consists of just two domain entities:
+The  app consists of just two domain entities:
 
 image::http://yuml.me/65cb9300[link="http://yuml.me/65cb9300"]
 
-The sample also embeds a Neo4J server running on port 7474; this means that we can inspect the objects as they are created.
+It also embeds a Neo4J server running on port 7474; this means that we can inspect the objects as they are created.
 
 == Screenshots
 
-Install the fixture data from the menu:
-
-image::{_imagesdir}/010-install-fixtures.png[width="800px", height="572px", link="{_imagesdir}/010-install-fixtures.png"]
-
-We select the `RecreateHostsScenarioFixture`:
+Install the fixture data from the menu using `Prototyping > Run Fixture Script`, and select the `RecreateHostsScenarioFixture`:
 
 image::{_imagesdir}/020-fixture-prompt.png[width="800px", height="572px", link="{_imagesdir}/020-fixture-prompt.png"]
 
-This will create a random (small) number of ``Host``s.  The fixture results returns links to each of the ``Host``s:
+This will create a random (small) number of `Host` insatnces.  The fixture results returns links to each of these objects:
 
 image::{_imagesdir}/030-fixture-results.png[width="800px", height="572px", link="{_imagesdir}/030-fixture-results.png"]
 
-Each host has a (random, small) number of associated ``IpAddress``es.  We can inspect any one of these by following the link:
+Each `Host` in turn has a (random, small) number of associated `IpAddress` instances.  We can inspect any one of these by following the link:
 
 image::{_imagesdir}/040-host.png[width="800px", height="572px", link="{_imagesdir}/040-host.png"]
 
-We can now switch to the embedded Neo4J server, running on port 7474.
+Now switch to the embedded Neo4J server, running on port 7474.  Click on the icon, top left:
 
 image::{_imagesdir}/050-neo4j-embedded-server.png[width="800px", height="572px", link="{_imagesdir}/050-neo4j-embedded-server.png"]
 
-Click on the icon, top left, and in slides a panel.  From there we can query for all available nodes:
+In slides a panel.  From there we can query for all available nodes:
 
 image::{_imagesdir}/060-neo4j-query-nodes.png[width="800px", height="572px", link="{_imagesdir}/060-neo4j-query-nodes.png"]
 
@@ -39,5 +35,5 @@ The graph of nodes (our `Host` and associated `IpAddress` entities) is then show
 
 image::{_imagesdir}/070-view-nodes.png[width="800px", height="572px", link="{_imagesdir}/070-view-nodes.png"]
 
-You'll find that the entities all expose a `title` property, so you can use this as the label within Neo4J browser.
+Both the `Host` and `IpAddress` entities have a `title` property, so you can use this as the label within Neo4J browser.
 
