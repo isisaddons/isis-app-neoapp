@@ -3,7 +3,6 @@ package neoapp.dom.services.titling;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jdo.PersistenceManager;
 import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.StoreLifecycleListener;
 
@@ -22,27 +21,21 @@ public class TitlingService {
 
     @PostConstruct
     public void init() {
-        getPersistenceManagerFactory().addInstanceLifecycleListener(new StoreLifecycleListener() {
-
-            @Override
-            public void preStore(final InstanceLifecycleEvent event) {
-                final Object persistentInstance = event.getPersistentInstance();
-                if(persistentInstance instanceof ObjectWithPersistedTitle) {
-                    final ObjectWithPersistedTitle objectWithPersistedTitle = (ObjectWithPersistedTitle) persistentInstance;
-                    objectWithPersistedTitle.setTitle(container.titleOf(objectWithPersistedTitle));
+        isisJdoSupport.getJdoPersistenceManager().addInstanceLifecycleListener(
+            new StoreLifecycleListener() {
+                @Override
+                public void preStore(final InstanceLifecycleEvent event) {
+                    final Object persistentInstance = event.getPersistentInstance();
+                    if (persistentInstance instanceof ObjectWithPersistedTitle) {
+                        final ObjectWithPersistedTitle objectWithPersistedTitle = (ObjectWithPersistedTitle) persistentInstance;
+                        objectWithPersistedTitle.setTitle(container.titleOf(objectWithPersistedTitle));
+                    }
                 }
-            }
-
-            @Override
-            public void postStore(final InstanceLifecycleEvent event) {
-            }
-        }, null);
+                @Override
+                public void postStore(final InstanceLifecycleEvent event) {
+                }
+            }, null);
     }
-
-    PersistenceManager getPersistenceManagerFactory() {
-        return isisJdoSupport.getJdoPersistenceManager();
-    }
-
     @Inject
     private IsisJdoSupport isisJdoSupport;
     @Inject
