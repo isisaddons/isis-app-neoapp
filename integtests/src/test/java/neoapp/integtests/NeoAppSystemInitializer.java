@@ -47,10 +47,7 @@ public class NeoAppSystemInitializer {
             with(new DataNucleusPersistenceMechanismInstaller());
 
             // services annotated with @DomainService
-            withServicesIn("neoapp.dom"
-                    , "neoapp.fixture"
-                    , "org.isisaddons.module.fakedata.dom"
-            );
+            withServicesIn("neoapp", "org.isisaddons.module.fakedata");
 
         }
 
@@ -63,7 +60,7 @@ public class NeoAppSystemInitializer {
             // enable stricter checking
             testConfiguration.put(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, "true");
 
-            testConfiguration.addRegisterEntitiesPackagePrefix("dom");
+            testConfiguration.addRegisterEntitiesPackagePrefix("neoapp");
 
             return testConfiguration;
         }
