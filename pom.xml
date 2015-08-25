@@ -39,7 +39,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <assertj-core.version>2.0.0</assertj-core.version>
-        <datanucleus-neo4j.version>4.0.5</datanucleus-neo4j.version>
+        <datanucleus-neo4j.version>4.1.1</datanucleus-neo4j.version>
     </properties>
 
     <repositories>
