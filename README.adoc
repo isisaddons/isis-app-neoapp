@@ -37,3 +37,4 @@ image::{_imagesdir}/070-view-nodes.png[width="800px", height="572px", link="{_im
 
 Both the `Host` and `IpAddress` entities have a `title` property, so you can use this as the label within Neo4J browser.
 
+
