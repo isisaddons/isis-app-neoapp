@@ -23,7 +23,7 @@
 
     <groupId>org.isisaddons.app</groupId>
     <artifactId>neoapp</artifactId>
-    <version>1.11.0-SNAPSHOT</version>
+    <version>1.13.0-SNAPSHOT</version>
 
     <name>Neo App</name>
 
@@ -34,7 +34,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.11.0</isis.version>
+        <isis.version>1.13.0-SNAPSHOT</isis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -263,27 +263,27 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>neoapp-dom</artifactId>
-                <version>1.10.0-SNAPSHOT</version>
+                <version>1.13.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>neoapp-fixture</artifactId>
-                <version>1.10.0-SNAPSHOT</version>
+                <version>1.13.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>neoapp-server</artifactId>
-                <version>1.10.0-SNAPSHOT</version>
+                <version>1.13.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>neoapp-integtests</artifactId>
-                <version>1.10.0-SNAPSHOT</version>
+                <version>1.13.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>neoapp-webapp</artifactId>
-                <version>1.10.0-SNAPSHOT</version>
+                <version>1.13.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>

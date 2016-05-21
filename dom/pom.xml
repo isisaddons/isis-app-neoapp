@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.isisaddons.app</groupId>
         <artifactId>neoapp</artifactId>
-        <version>1.11.0-SNAPSHOT</version>
+        <version>1.13.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>neoapp-dom</artifactId>
@@ -150,48 +150,6 @@
                     <artifactId>datanucleus-api-jdo</artifactId>
                 </dependency>
             </dependencies>
-        </profile>
-        <profile>
-            <id>isis-validate</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.isis.tool</groupId>
-                        <artifactId>isis-maven-plugin</artifactId>
-                        <version>${isis.version}</version>
-                        <configuration>
-                            <isisConfigDir>../webapp/src/main/webapp/WEB-INF</isisConfigDir>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.isis.example.application</groupId>
-                                <artifactId>neoapp-dom</artifactId>
-                                <version>1.10.0-SNAPSHOT</version>
-                            </dependency>
-                            <!--
-                            ... workaround to avoid conflict with plexus-default
-                                (not sure why exclusions in the isis-maven-plugin aren't sufficient, though ...
-                            -->
-                            <dependency>
-                                <groupId>com.google.guava</groupId>
-                                <artifactId>guava</artifactId>
-                                <version>16.0.1</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>validate</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 
