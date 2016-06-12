@@ -16,16 +16,21 @@
  */
 package neoapp.integtests;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import neoapp.dom.NeoAppDomModule;
+import neoapp.fixture.NeoAppFixtureModule;
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+import org.isisaddons.module.fakedata.FakeDataModule;
 
-/**
- * Holds an instance of an {@link IsisSystemForTest} as a {@link ThreadLocal} on the current thread,
- * initialized with ToDo app's domain services. 
- */
+import java.util.List;
+import java.util.Map;
+
 public class NeoAppSystemInitializer {
     
     private NeoAppSystemInitializer(){}
@@ -33,37 +38,51 @@ public class NeoAppSystemInitializer {
     public static IsisSystemForTest initIsft() {
         IsisSystemForTest isft = IsisSystemForTest.getElseNull();
         if(isft == null) {
-            isft = new NeoAppSystemBuilder().build().setUpSystem();
+            isft = new IsisSystemForTest.Builder()
+                    .withLoggingAt(org.apache.log4j.Level.INFO)
+                    .with(new IsisConfigurationForJdoIntegTests())
+                    .with(new AppManifest() {
+                        @Override
+                        public List<Class<?>> getModules() {
+                            return Lists.<Class<?>>newArrayList(
+                                    NeoAppDomModule.class,
+                                    NeoAppFixtureModule.class,
+                                    FakeDataModule.class
+                            );
+                        }
+
+                        @Override
+                        public List<Class<?>> getAdditionalServices() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getAuthenticationMechanism() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getAuthorizationMechanism() {
+                            return null;
+                        }
+
+                        @Override
+                        public List<Class<? extends FixtureScript>> getFixtures() {
+                            return null;
+                        }
+
+                        @Override
+                        public Map<String, String> getConfigurationProperties() {
+                            Map<String, String> map = Maps.<String, String>newHashMap();
+                            map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "javax.jdo.option.ConnectionURL", "neo4j:testDB");
+                            map.put(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, "true");
+                            return map;
+                        }
+                    })
+                    .build()
+                    .setUpSystem();
             IsisSystemForTest.set(isft);
         }
         return isft;
     }
-
-    private static class NeoAppSystemBuilder extends IsisSystemForTest.Builder {
-
-        public NeoAppSystemBuilder() {
-            withLoggingAt(org.apache.log4j.Level.INFO);
-            with(testConfiguration());
-            with(new DataNucleusPersistenceMechanismInstaller());
-
-            // services annotated with @DomainService
-            withServicesIn("neoapp", "org.isisaddons.module.fakedata");
-
-        }
-
-        private static IsisConfiguration testConfiguration() {
-            final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
-
-            // override the standard DN configurations to use neo4j instead of JDBC
-            testConfiguration.putDataNucleusProperty("javax.jdo.option.ConnectionURL", "neo4j:testDB");
-
-            // enable stricter checking
-            testConfiguration.put(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, "true");
-
-            testConfiguration.addRegisterEntitiesPackagePrefix("neoapp");
-
-            return testConfiguration;
-        }
-    }
-
 }
