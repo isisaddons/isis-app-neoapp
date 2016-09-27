@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.isisaddons.app</groupId>
 		<artifactId>neoapp</artifactId>
-		<version>1.13.0-SNAPSHOT</version>
+		<version>1.14.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>neoapp-server</artifactId>
 
-	<name>Neo App Server (port 7474)</name>
+	<name>App NeoApp Server (port 7474)</name>
 	<description>Adapted from https://github.com/Sprint/isis-neo4</description>
 
 	<properties>
@@ -58,7 +58,7 @@
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtime</artifactId>
-			<version>1.13.0-SNAPSHOT</version>
+			<version>${isis.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
